@@ -10,7 +10,7 @@ Make a simple webserver.
 # Source
 Some methods about web server refer to following 
 
-https://mozillazg.com/2015/08/let-us-build-a-web-server-part-3-zh-cn.html
+https://ruslanspivak.com/lsbasi-part1/
 
 ### Contribution/ Licensing
 Generally everything is LICENSE'D under the Apache 2 license by HAOYANG HONG.
