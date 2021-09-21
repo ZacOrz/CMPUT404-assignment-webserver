@@ -10,7 +10,7 @@ Make a simple webserver.
 # Source
 Some methods about web server refer to following 
 
-https://ruslanspivak.com/lsbasi-part1/
+https://ruslanspivak.com/lsbaws-part1/
 
 ### Contribution/ Licensing
 Generally everything is LICENSE'D under the Apache 2 license by HAOYANG HONG.
