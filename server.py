@@ -32,31 +32,26 @@ class MyWebServer(socketserver.BaseRequestHandler):
     
     def handle(self):
         #receive the requests from client
-        
+        self.status = 200
+
         self.data = self.request.recv(1024).strip()
         print ("Got a request of: %s\n" % self.data)
         print(self.data.decode("utf-8"))
-    
+
         request_type = self.get_request_method(self.data.decode('utf-8'))
         file_location = self.get_file_location(self.data.decode('utf-8'))
+        file_content = self.get_file_content(file_location)
 
         print(request_type)
+        print("\n")
         print(file_location)
 
         self.status_405(request_type)
         self.status_404(file_location)
         self.status_301(file_location)
-
-        file_content = self.get_file_content(file_location)
-
-        #Send HTTP Response
-        self.request.sendall(bytearray("HTTP/1.1 200 OK\r\n",'utf-8'))
-        self.request.sendall(bytearray(file_content + '\r\n', 'utf-8'))
-        self.request.sendall(bytearray('Connection: close\r\n', 'utf-8'))
-        self.request.sendall(bytearray('\r\n', 'utf-8'))
-        self.request.sendall(bytearray(open(file_location, 'r').read() + '\r\n', 'utf-8'))
-
-        #self.request.sendall(bytearray("OK",'utf-8'))
+        self.status_200(file_location, file_content)
+    
+        self.request.sendall(bytearray("OK",'utf-8'))
 
     def get_request_method(self, data):
         """
@@ -84,14 +79,21 @@ class MyWebServer(socketserver.BaseRequestHandler):
         This function returns the http response which indicates the content
         of the current file
         """
+        
         file_types = ['html', 'css']
         for type in file_types:
             if type in file_location:
                 return 'Content-Type:text/' + type
-
         return 'Content-Type:text/plain'
-
-
+    
+    # 200: OK
+    def status_200(self, file_location, file_content):
+        if self.status == 200:
+            self.request.sendall(bytearray("HTTP/1.1 200 OK\n",'utf-8'))
+            self.request.sendall(bytearray(file_content + '\n', 'utf-8'))
+            self.request.sendall(bytearray(open(file_location, 'r').read() + '\n', 'utf-8'))
+            return
+    
     # 301: Moved Permently
     def status_301(self, URL):
         """
@@ -100,10 +102,11 @@ class MyWebServer(socketserver.BaseRequestHandler):
         """
         
         if "./www/deep" == URL:
-            print("redirected to a new directory: " + URL + " :Sending 301 status code\n")
-            self.request.sendall(bytearray('HTTP/1.1 301 Moved Permanently\r\n','utf-8'))
-            self.request.sendall(bytearray('Connection close\r\n', 'utf-8'))
-            self.request.sendall(bytearray('location: /deep/\r\n', 'utf-8'))
+            print("redirected to: " + URL + " :Sending 301 status code\n")
+            self.request.sendall(bytearray('HTTP/1.1 301 Moved Permanently\n','utf-8'))
+            self.request.sendall(bytearray('Correct location: /deep/\n', 'utf-8'))
+            self.status = 301
+            return
 
     # 404: Not Found
     def status_404(self, URL):
@@ -115,14 +118,15 @@ class MyWebServer(socketserver.BaseRequestHandler):
 
         if not os.path.exists(URL):
             print("Non-exis path: " + URL + ":Send 404 status code\n")
-            self.request.sendall(bytearray('HTTP/1.1 404 Not Found\r\n', 'utf-8'))
-            self.request.sendall(bytearray('Connection close\r\n', 'utf-8'))
+            self.request.sendall(bytearray('HTTP/1.1 404 Not Found\n', 'utf-8'))
+            self.status = 404
             return
         
         if '../' in URL:
             print("Non-exist path: " + URL + ":Send 404 status code\n")
-            self.request.sendall(bytearray('HTTP/1.1 404 Not Found\r\n', 'utf-8'))
-            self.request.sendall(bytearray('Connection close\r\n', 'utf-8'))
+            self.request.sendall(bytearray('HTTP/1.1 404 Not Found\n', 'utf-8'))
+            self.request.sendall(bytearray('Connection close\n', 'utf-8'))
+            self.status = 404
             return
         
 
@@ -134,8 +138,8 @@ class MyWebServer(socketserver.BaseRequestHandler):
         """
         if not type == 'GET':
             print("Invalid request: " + type + ":Sending 405 status code\n")
-            self.request.sendall(bytearray('HTTP/1.1 405 Method Not Allowed\r\n', 'utf-8'))
-            self.request.sendall(bytearray('Connection close\r\n', 'utf-8'))
+            self.request.sendall(bytearray('HTTP/1.1 405 Method Not Allowed\n', 'utf-8'))
+            self.status = 405
             return
         
 
