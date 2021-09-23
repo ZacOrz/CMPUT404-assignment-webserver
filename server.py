@@ -73,8 +73,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
 
     def check_file_content(self, file_location):
         """
-        This function returns the http response which indicates the content
-        of the current file
+        This function returns the type of current file
         """
         
         file_types = ['html', 'css']
