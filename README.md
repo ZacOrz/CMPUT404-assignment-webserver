@@ -11,6 +11,9 @@ Make a simple webserver.
 Some methods about web server refer to following 
 
 https://ruslanspivak.com/lsbaws-part1/
+https://www.geeksforgeeks.org/python-os-path-exists-method/#:~:text=os.-,path.,open%20file%20descriptor%20or%20not.
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview
+https://developer.mozilla.org/en-US/docs/Web/HTTP
 
 ### Contribution/ Licensing
 Generally everything is LICENSE'D under the Apache 2 license by HAOYANG HONG.
