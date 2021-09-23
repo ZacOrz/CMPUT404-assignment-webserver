@@ -119,7 +119,6 @@ class MyWebServer(socketserver.BaseRequestHandler):
         if '../' in URL:
             print("Non-exist path: " + URL + ":Send 404 status code\r\n")
             self.request.sendall(bytearray('HTTP/1.1 404 Not Found\r\n', 'utf-8'))
-            self.request.sendall(bytearray('Connection close\r\n', 'utf-8'))
             self.status = 404
             return
         
