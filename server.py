@@ -32,7 +32,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
     
     def handle(self):
         #receive the requests from client
-        self.status = 200
+        self.status = 200  #self.status is used to check the status code and control the status_200 function
 
         self.data = self.request.recv(1024).strip()
         print ("Got a request of: %s\r\n" % self.data)
@@ -40,7 +40,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
 
         request_type = self.get_request_method(self.data.decode('utf-8'))
         file_location = self.get_file_location(self.data.decode('utf-8'))
-        file_content = self.get_file_content(file_location)
+        file_content = self.check_file_content(file_location)
 
         print(request_type)
         print("\r\n")
@@ -55,15 +55,13 @@ class MyWebServer(socketserver.BaseRequestHandler):
     def get_request_method(self, data):
         """
         Find what type of Request we are getting
-        get the HTTP request method
         """
         #return the string of request_type
         return str(data).split(' ')[0]
 
     def get_file_location(self, data):
         """
-        This function returns the location where the requested file lies
-        within the file path
+        This function returns the location the requested file lies
         """
 
         file_location = './www' + str(data).split(' ')[1]
@@ -73,7 +71,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
 
         return file_location
 
-    def get_file_content(self, file_location):
+    def check_file_content(self, file_location):
         """
         This function returns the http response which indicates the content
         of the current file
@@ -96,8 +94,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
     # 301: Moved Permently
     def status_301(self, URL):
         """
-        This function checks against a variety of predefined URLs to see if there is a match
-        in the case that there is it returns True
+        This function checks URLs to see if there is a match
         """
         
         if "./www/deep" == URL:
@@ -110,9 +107,8 @@ class MyWebServer(socketserver.BaseRequestHandler):
     # 404: Not Found
     def status_404(self, URL):
         """
-        This function checks if a 404 error should be thrown which occurs
-        in two cases, the path does not exist or the path given is outside of
-        www directory
+        This function checks if a 404 error 
+        (if the path does not exist )
         """
 
         if not os.path.exists(URL):
