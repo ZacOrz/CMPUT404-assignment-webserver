@@ -8,7 +8,7 @@ See requirements.org (plain-text) for a description of the project.
 Make a simple webserver.
 
 # Source
-Some methods about web server refer to following 
+Some methods for web servers refer to the following
 
 https://ruslanspivak.com/lsbaws-part1/
 
@@ -21,12 +21,12 @@ https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview
 https://developer.mozilla.org/en-US/docs/Web/HTTP
 
 ### Contribution/ Licensing
-Generally everything is LICENSE'D under the Apache 2 license by HAOYANG HONG.
+Generally, everything is LICENSE'D under the Apache 2 license by HAOYANG HONG.
 
 
 server.py provided by Abram Hindle 
 
-files donwload from Github of Abram Hindle
+files download from Github of Abram Hindle
 
 server.py contains contributions from:
 
